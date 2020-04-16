@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  default:
+
+volumes:
+  postgres:
+
+services:
+  postgres:
+    image: postgres:12
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

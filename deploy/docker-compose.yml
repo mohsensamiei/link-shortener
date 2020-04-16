@@ -1,0 +1,19 @@
+version: "3"
+
+networks:
+  default:
+
+volumes:
+  postgres:
+
+services: 
+  account:
+    image: shortener/account:latest
+  link:
+    image: shortener/link:latest
+  postgres:
+    image: postgres:12
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
