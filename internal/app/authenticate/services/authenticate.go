@@ -73,7 +73,7 @@ func (s authenticate) Register(_ context.Context, req *api.AuthenticateRegisterR
 func (s authenticate) Check(_ context.Context, req *api.AuthenticateCheckRequest) (*api.AuthenticateCheckResponse, error) {
 	claims, err := jwtext.LoadClaims(s.Configs.AuthenticateTokenKey, req.Token)
 	if err != nil {
-		return nil, errors.Wrap(errorsext.ErrUnauthorized, err.Error())
+		return nil, errors.Wrap(errorsext.ErrUnauthorized, invalidToken)
 	}
 	return &api.AuthenticateCheckResponse{
 		Email:    claims.Email,

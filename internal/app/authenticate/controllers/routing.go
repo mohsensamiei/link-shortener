@@ -11,7 +11,7 @@ func RegisterRoutes(engine *gin.Engine, ctx context.Context, configs env.Configs
 	engine.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{"*"},
-		AllowMethods: []string{"OPTIONS", "POST"},
+		AllowMethods: []string{"OPTIONS", "POST", "GET"},
 	}))
 
 	authenticateCtrl := NewAuthenticate(ctx, configs)
