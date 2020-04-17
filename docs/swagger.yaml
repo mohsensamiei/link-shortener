@@ -1,0 +1,154 @@
+openapi: 3.0.1
+info:
+  title: Link Shortener
+  description: Implement link shortener in GO language
+  version: v0.0.1
+servers:
+  - url: http://localhost:2080
+paths:
+  /authenticates:
+    post:
+      summary: login with email/username and password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        500:
+          $ref: '#/components/responses/500'
+    get:
+      summary: check auth with token.
+      security:
+        - jwt:
+          - read
+          - white
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        401:
+          $ref: '#/components/responses/401'
+        500:
+          $ref: '#/components/responses/500'
+  /authenticates/register:
+    post:
+      summary: register with email, username and password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register'
+      responses:
+        201:
+          description: OK
+        400:
+          $ref: '#/components/responses/400'
+        409:
+          $ref: '#/components/responses/409'
+        500:
+          $ref: '#/components/responses/500'
+
+
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+  responses:
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  schemas:
+    error:
+      type: object
+      readOnly: true
+      properties:
+        error:
+          type: string
+    token:
+      type: object
+      readOnly: true
+      properties:
+        code:
+          type: string
+        duration:
+          type: number
+    user:
+      type: object
+      readOnly: true
+      properties:
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+    login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 5
+          maxLength: 100
+        username:
+          type: string
+          minLength: 5
+          maxLength: 25
+        password:
+          type: string
+          format: password
+          minLength: 6
+          maxLength: 18
+    register:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 5
+          maxLength: 100
+        username:
+          type: string
+          minLength: 5
+          maxLength: 25
+        password:
+          type: string
+          format: password
+          minLength: 6
+          maxLength: 18

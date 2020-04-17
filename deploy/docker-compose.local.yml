@@ -5,6 +5,7 @@ networks:
 
 volumes:
   postgres:
+  redis:
 
 services:
   postgres:
@@ -15,3 +16,11 @@ services:
       - postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  redis:
+    image: bitnami/redis:latest
+    env_file:
+      - .env
+    volumes:
+      - redis:/bitnami/redis/data
+    ports:
+      - 6379:6379

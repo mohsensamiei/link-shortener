@@ -1,0 +1,33 @@
+syntax = "proto3";
+package api;
+import "misc.proto";
+
+service Authenticate {
+    rpc Login (AuthenticateLoginRequest) returns (AuthenticateLoginResponse);
+    rpc Register (AuthenticateRegisterRequest) returns (VoidResponse);
+    rpc Check (AuthenticateCheckRequest) returns (AuthenticateCheckResponse);
+}
+
+message AuthenticateLoginRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+message AuthenticateLoginResponse {
+    string token = 1;
+    int32 duration = 2;
+}
+
+message AuthenticateRegisterRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message AuthenticateCheckRequest {
+    string token = 1;
+}
+message AuthenticateCheckResponse {
+    string email = 1;
+    string username = 2;
+}
