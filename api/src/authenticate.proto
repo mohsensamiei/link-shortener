@@ -28,6 +28,7 @@ message AuthenticateCheckRequest {
     string token = 1;
 }
 message AuthenticateCheckResponse {
-    string email = 1;
-    string username = 2;
+    string id = 1;
+    string email = 2;
+    string username = 3;
 }

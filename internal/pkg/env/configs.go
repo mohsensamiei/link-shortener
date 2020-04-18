@@ -13,7 +13,8 @@ import (
 )
 
 type Configs struct {
-	Mode string `env:"GIN_MODE" envDefault:"debug"`
+	Mode       string `env:"GIN_MODE" envDefault:"debug"`
+	AsyncCount int    `env:"ASYNC_COUNT" envDefault:"10"`
 
 	PostgresHost string `env:"POSTGRES_HOST"`
 	PostgresUser string `env:"POSTGRES_USER"`
@@ -27,6 +28,17 @@ type Configs struct {
 	AuthenticateTokenDuration time.Duration `env:"AUTHENTICATE_TOKEN_DURATION" envDefault:"24h"`
 	AuthenticateHttpHost      string        `env:"AUTHENTICATE_HTTP_HOST" envDefault:"localhost:2080"`
 	AuthenticateGrpcHost      string        `env:"AUTHENTICATE_GRPC_HOST" envDefault:"localhost:2135"`
+
+	ShortenerSlugLen      int           `env:"SHORTENER_SLUG_LEN" envDefault:"7"`
+	ShortenerHttpHost     string        `env:"SHORTENER_HTTP_HOST" envDefault:"localhost:3080"`
+	ShortenerGrpcHost     string        `env:"SHORTENER_GRPC_HOST" envDefault:"localhost:3135"`
+	ShortenerRedisDB      int           `env:"SHORTENER_REDIS_DB" envDefault:"0"`
+	ShortenerPostgresDB   string        `env:"SHORTENER_POSTGRES_DB" envDefault:"shortener"`
+	ShortenerCashDuration time.Duration `env:"SHORTENER_CASH_DURATION" envDefault:"1h"`
+
+	StatisticsPostgresDB string `env:"STATISTICS_POSTGRES_DB" envDefault:"statistics"`
+	StatisticsHttpHost   string `env:"STATISTICS_HTTP_HOST" envDefault:"localhost:4080"`
+	StatisticsGrpcHost   string `env:"STATISTICS_GRPC_HOST" envDefault:"localhost:4135"`
 }
 
 func (configs *Configs) LoadEnv(filenames ...string) error {

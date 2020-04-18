@@ -8,10 +8,12 @@ volumes:
   redis:
 
 services: 
-  account:
-    image: shortener/account:latest
-  link:
-    image: shortener/link:latest
+  authenticate:
+    image: link/authenticate:latest
+  shortener:
+    image: link/shortener:latest
+  statistics:
+    image: link/statistics:latest
   postgres:
     image: postgres:12
     env_file:

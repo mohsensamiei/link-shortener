@@ -5,6 +5,8 @@ info:
   version: v0.0.1
 servers:
   - url: http://localhost:2080
+  - url: http://localhost:3080
+  - url: http://localhost:4080
 paths:
   /authenticates:
     post:
@@ -61,9 +63,461 @@ paths:
           $ref: '#/components/responses/409'
         500:
           $ref: '#/components/responses/500'
-
-
-
+  /links:
+    post:
+      summary: create new short link.
+      security:
+        - jwt:
+          - read
+          - white
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                slug:
+                  type: string
+                  minLength: 5
+                  maxLength: 25
+                url:
+                  type: string
+                  minLength: 5
+                  maxLength: 250
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                    minLength: 5
+                    maxLength: 25
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        409:
+          $ref: '#/components/responses/409'
+        500:
+          $ref: '#/components/responses/500'
+  /r/{link_slug}:
+    get:
+      summary: redirect to short link.
+      parameters:
+        - in: path
+          name: link_slug
+          schema:
+            type: string
+          required: true
+      responses:
+        308:
+          description: Redirect
+          content:
+            text/html:
+              schema:
+                type: string
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+  /visits/user:
+    get:
+      summary: report by url
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  today:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_day:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_week:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_month:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                user_id:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+        500:
+          $ref: '#/components/responses/500'
+  /visits/url:
+    get:
+      summary: report by url
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  today:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_day:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_week:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+                  last_month:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                count:
+                                  type: number
+                      by_mobile:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                is_mobile:
+                                  type: boolean
+                                count:
+                                  type: number
+                      by_browser:
+                        type: object
+                        properties:
+                          today:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                browser:
+                                  type: string
+                                count:
+                                  type: number
+        500:
+          $ref: '#/components/responses/500'
 components:
   securitySchemes:
     jwt:
@@ -78,6 +532,12 @@ components:
             $ref: '#/components/schemas/error'
     401:
       description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    404:
+      description: Not Found
       content:
         application/json:
           schema:

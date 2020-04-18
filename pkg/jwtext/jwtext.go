@@ -3,16 +3,15 @@ package jwtext
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
-	uuid "github.com/satori/go.uuid"
 	"time"
 )
 
-func NewClaims(id uuid.UUID, email, username string, duration time.Duration) *Claims {
+func NewClaims(id string, email, username string, duration time.Duration) *Claims {
 	return &Claims{
 		Email:    email,
 		Username: username,
-		Id:       id,
 		StandardClaims: jwt.StandardClaims{
+			Id:        id,
 			ExpiresAt: time.Now().Add(duration).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
@@ -33,9 +32,8 @@ func LoadClaims(key, token string) (*Claims, error) {
 }
 
 type Claims struct {
-	Email    string    `json:"email"`
-	Username string    `json:"username"`
-	Id       uuid.UUID `json:"jti,omitempty"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
 	jwt.StandardClaims
 }
 

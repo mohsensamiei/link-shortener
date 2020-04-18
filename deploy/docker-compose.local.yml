@@ -5,6 +5,7 @@ networks:
 
 volumes:
   postgres:
+  pgadmin:
   redis:
 
 services:
@@ -16,6 +17,14 @@ services:
       - postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    env_file:
+      - .env
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 15432:80
   redis:
     image: bitnami/redis:latest
     env_file:
