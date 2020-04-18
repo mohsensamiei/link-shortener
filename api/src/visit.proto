@@ -1,0 +1,70 @@
+syntax = "proto3";
+package api;
+import "misc.proto";
+
+service Visit {
+    rpc Register (VisitRegisterRequest) returns (VoidResponse);
+    rpc ReportByUrl (VoidRequest) returns (VisitReportByUrlResponse);
+    rpc ReportByUser (VoidRequest) returns (VisitReportByUserResponse);
+}
+
+message VisitRegisterRequest {
+    string url = 1;
+    string user_id = 2;
+    bool is_mobile = 3;
+    string browser = 4;
+}
+
+message VisitReportByUrlResponse {
+    message Total {
+        string url = 1;
+        int64 count = 2;
+    }
+    message ByMobile {
+        string url = 1;
+        bool is_mobile = 2;
+        int64 count = 3;
+    }
+    message ByBrowser {
+        string url = 1;
+        string browser = 2;
+        int64 count = 3;
+    }
+    message Report {
+        repeated Total total = 1;
+        repeated ByMobile by_mobile = 2;
+        repeated ByBrowser by_browser = 3;
+    }
+    Report today = 1;
+    Report last_day = 2;
+    Report last_week = 3;
+    Report last_month = 4;
+}
+message VisitReportByUserResponse {
+    message Total {
+        string url = 1;
+        string user_id = 2;
+        int64 count = 3;
+    }
+    message ByMobile {
+        string url = 1;
+        string user_id = 2;
+        bool is_mobile = 3;
+        int64 count = 4;
+    }
+    message ByBrowser {
+        string url = 1;
+        string user_id = 2;
+        string browser = 3;
+        int64 count = 4;
+    }
+    message Report {
+        repeated Total total = 1;
+        repeated ByMobile by_mobile = 2;
+        repeated ByBrowser by_browser = 3;
+    }
+    Report today = 1;
+    Report last_day = 2;
+    Report last_week = 3;
+    Report last_month = 4;
+}
