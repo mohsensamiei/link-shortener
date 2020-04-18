@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func GetAuthBrearerToken(ctx *gin.Context) string {
+func GetAuthBearerToken(ctx *gin.Context) string {
 	token := ctx.GetHeader("Authorization")
 	dump := strings.Split(token, "Bearer")
 	if len(dump) != 2 {

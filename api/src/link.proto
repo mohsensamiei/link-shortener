@@ -1,0 +1,22 @@
+syntax = "proto3";
+package api;
+
+service Link {
+    rpc Create (LinkCreateRequest) returns (LinkCreateResponse);
+    rpc Return (LinkReturnRequest) returns (LinkReturnResponse);
+}
+
+message LinkCreateRequest {
+    string url = 1;
+    string slug = 2;
+}
+message LinkCreateResponse {
+    string slug = 1;
+}
+
+message LinkReturnRequest {
+    string slug = 1;
+}
+message LinkReturnResponse {
+    string url = 1;
+}

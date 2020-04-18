@@ -46,7 +46,7 @@ func (s authenticate) Login(_ context.Context, req *api.AuthenticateLoginRequest
 		return nil, errors.Wrap(errorsext.ErrUnauthorized, invalidCredentials)
 	}
 
-	claims := jwtext.NewClaims(user.ID, user.Email, user.Username, s.Configs.AuthenticateTokenDuration)
+	claims := jwtext.NewClaims(user.ID.String(), user.Email, user.Username, s.Configs.AuthenticateTokenDuration)
 	token, err := claims.Token(s.Configs.AuthenticateTokenKey)
 	if err != nil {
 		return nil, err
@@ -76,6 +76,7 @@ func (s authenticate) Check(_ context.Context, req *api.AuthenticateCheckRequest
 		return nil, errors.Wrap(errorsext.ErrUnauthorized, invalidToken)
 	}
 	return &api.AuthenticateCheckResponse{
+		Id:       claims.Id,
 		Email:    claims.Email,
 		Username: claims.Username,
 	}, nil

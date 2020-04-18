@@ -69,7 +69,7 @@ func (c authenticate) Login(ctx *gin.Context) {
 
 func (c authenticate) Check(ctx *gin.Context) {
 	req := &api.AuthenticateCheckRequest{
-		Token: ginext.GetAuthBrearerToken(ctx),
+		Token: ginext.GetAuthBearerToken(ctx),
 	}
 	res, err := c.AuthenticateClient().Check(c.Context, req)
 	if err != nil {
