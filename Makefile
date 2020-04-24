@@ -1,6 +1,6 @@
 GOPATH=${HOME}/go
 
-.PHONY: build
+.PHONY: build, test
 
 proto:
 	@echo "generating protobuf codes"
