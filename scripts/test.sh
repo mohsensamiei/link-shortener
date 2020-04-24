@@ -1,3 +1,3 @@
 #!/bin/sh
 
-go test ./...
+go test -v -bench=. -benchtime=120x ./test/
