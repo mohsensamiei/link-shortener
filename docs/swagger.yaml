@@ -11,6 +11,8 @@ paths:
   /authenticates:
     post:
       summary: login with email/username and password.
+      tags:
+        - http://localhost:2080
       requestBody:
         content:
           application/json:
@@ -31,6 +33,8 @@ paths:
           $ref: '#/components/responses/500'
     get:
       summary: check auth with token.
+      tags:
+        - http://localhost:2080
       security:
         - jwt:
           - read
@@ -49,6 +53,8 @@ paths:
   /authenticates/register:
     post:
       summary: register with email, username and password.
+      tags:
+        - http://localhost:2080
       requestBody:
         content:
           application/json:
@@ -66,6 +72,8 @@ paths:
   /links:
     post:
       summary: create new short link.
+      tags:
+        - http://localhost:3080
       security:
         - jwt:
           - read
@@ -107,6 +115,8 @@ paths:
   /r/{link_slug}:
     get:
       summary: redirect to short link.
+      tags:
+        - http://localhost:3080
       parameters:
         - in: path
           name: link_slug
@@ -127,6 +137,8 @@ paths:
   /visits/user:
     get:
       summary: report by url
+      tags:
+        - http://localhost:4080
       responses:
         200:
           description: OK
@@ -336,6 +348,8 @@ paths:
   /visits/url:
     get:
       summary: report by url
+      tags:
+        - http://localhost:4080
       responses:
         200:
           description: OK

@@ -10,22 +10,22 @@ import (
 
 var src = rand.NewSource(time.Now().UnixNano())
 
-const LetterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 const (
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 	letterIdxBits = 6                    // 6 bits to represent a letter index
 	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
 	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
 )
 
 func States(length int) int {
-	return int(math.Pow(float64(len(LetterBytes)), float64(length)))
+	return int(math.Pow(float64(len(letterBytes)), float64(length)))
 }
 func StatesWithPrefix(length int, prefix string) int {
 	left := length - len(prefix)
 	if left < 0 {
 		left = 0
 	}
-	return int(math.Pow(float64(len(LetterBytes)), float64(left)))
+	return int(math.Pow(float64(len(letterBytes)), float64(left)))
 }
 
 func Generate(length int) string {
@@ -35,8 +35,8 @@ func Generate(length int) string {
 		if remain == 0 {
 			cache, remain = src.Int63(), letterIdxMax
 		}
-		if idx := int(cache & letterIdxMask); idx < len(LetterBytes) {
-			bytes[index] = LetterBytes[idx]
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			bytes[index] = letterBytes[idx]
 			index--
 		}
 		cache >>= letterIdxBits
