@@ -2,11 +2,12 @@ package server
 
 import (
 	"fmt"
+	"net"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/mohsensamiei/golog"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
-	"net"
 )
 
 type Server interface {
@@ -58,7 +59,7 @@ func (s server) Run() error {
 	interrupt := make(chan error)
 	if s.GrpcListener != nil && s.GrpcServer != nil {
 		go func(interrupt chan error) {
-			log.Data("serve", fmt.Sprint(s.HttpListener.Addr())).Info("start listening grpc")
+			log.Data("serve", fmt.Sprint(s.GrpcListener.Addr())).Info("start listening grpc")
 			if err := s.GrpcServer.Serve(s.GrpcListener); err != nil {
 				interrupt <- errors.Wrap(err, "can not serve grpc")
 			}
