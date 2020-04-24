@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mohsensamiei/link-shortener/api"
 	"github.com/mohsensamiei/link-shortener/internal/pkg/env"
 	"github.com/mohsensamiei/link-shortener/pkg/errorsext"
 	"github.com/mohsensamiei/link-shortener/pkg/ginext"
-	"net/http"
 )
 
 type Authenticate interface {
@@ -39,7 +40,9 @@ func (c authenticate) Register(ctx *gin.Context) {
 		return
 	}
 	if _, err := c.AuthenticateClient().Register(c.Context, req); err != nil {
-		if errorsext.IsConflict(err) {
+		if errorsext.IsValidation(err) {
+			ctx.JSON(http.StatusBadRequest, ctx.Error(err))
+		} else if errorsext.IsConflict(err) {
 			ctx.JSON(http.StatusConflict, ctx.Error(err))
 		} else {
 			ctx.JSON(http.StatusInternalServerError, ctx.Error(err))

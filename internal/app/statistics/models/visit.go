@@ -1,11 +1,14 @@
 package models
 
 import (
+	"time"
+
+	"github.com/go-playground/validator/v10"
 	"github.com/jinzhu/gorm"
+	"github.com/mohsensamiei/link-shortener/pkg/errorsext"
 	"github.com/mohsensamiei/link-shortener/pkg/gormext"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	"time"
 )
 
 const (
@@ -20,10 +23,10 @@ const (
 type Visit struct {
 	gormext.Model
 
-	Url      string     `gorm:"index"`
 	UserID   *uuid.UUID `gorm:"type:uuid;index"`
 	IsMobile bool       `gorm:"not null;index"`
-	Browser  string     `gorm:"not null;size:100;index"`
+	Browser  string     `gorm:"not null;size:100;index" validate:"required,max=100"`
+	Url      string     `gorm:"not null;size:250;index" validate:"required,max=250"`
 }
 
 type Report struct {
@@ -43,15 +46,21 @@ type VisitRepository interface {
 
 func NewVisitRepository(db *gorm.DB) VisitRepository {
 	return &visitRepository{
-		DB: db,
+		DB:       db,
+		Validate: validator.New(),
 	}
 }
 
 type visitRepository struct {
-	DB *gorm.DB
+	DB       *gorm.DB
+	Validate *validator.Validate
 }
 
 func (repo visitRepository) Create(model *Visit) error {
+	if err := repo.Validate.Struct(model); err != nil {
+		return errors.Wrap(errorsext.ErrValidation, err.Error())
+	}
+
 	if err := repo.DB.Create(model).Error; err != nil {
 		return errors.WithStack(err)
 	}

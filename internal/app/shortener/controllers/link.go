@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/mohsensamiei/golog"
 	"github.com/mohsensamiei/link-shortener/api"
@@ -11,7 +13,6 @@ import (
 	"github.com/mohsensamiei/link-shortener/pkg/errorsext"
 	"github.com/mohsensamiei/link-shortener/pkg/ginext"
 	"github.com/mssola/user_agent"
-	"net/http"
 )
 
 type Link interface {
@@ -86,7 +87,9 @@ func (c link) Create(ctx *gin.Context) {
 	}
 	res, err := c.LinkClient().Create(c.ContextWithToken(ctx), req)
 	if err != nil {
-		if errorsext.IsUnauthorized(err) {
+		if errorsext.IsValidation(err) {
+			ctx.JSON(http.StatusBadRequest, ctx.Error(err))
+		} else if errorsext.IsUnauthorized(err) {
 			ctx.JSON(http.StatusUnauthorized, ctx.Error(err))
 		} else if errorsext.IsConflict(err) {
 			ctx.JSON(http.StatusConflict, ctx.Error(err))
